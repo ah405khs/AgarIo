@@ -1,32 +1,40 @@
 package net.nseveryns.agario.net.packets;
 
-import io.netty.buffer.ByteBuf;
-import net.nseveryns.agario.net.Packet;
+        import io.netty.buffer.ByteBuf;
+        import net.nseveryns.agario.net.Packet;
 
 /**
+ * The packet that is sent to the server from the client.
+ * This will be used to update the movements on to the server.
+ *
+ * @packetId 0x02
+ * @packetData the id of the blob
+ * @packetData double 'x' position of blob
+ * @packetData double 'y' position of blob
+ * @packetData double 'z' position of blob
+ *
  * @author nseveryns
+ *
+ * @see net.nseveryns.agario.net.Packet
  */
 public class ClientMovePacket extends Packet {
-    private final String name;
+    private final int id;
     private final double x;
     private final double y;
     private final double z;
 
-    public ClientMovePacket(String name, double x, double y, double z) {
-        super(0x01);
-        this.name = name;
+    public ClientMovePacket(int id, double x, double y, double z) {
+        this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public ClientMovePacket() {
-        //For decoding
-        this(null, 0, 0, 0);
-    }
-
     @Override
     public void encode(ByteBuf buf) {
-        super.encode(buf);
+        buf.writeInt(id);
+        buf.writeDouble(x);
+        buf.writeDouble(y);
+        buf.writeDouble(z);
     }
 }
